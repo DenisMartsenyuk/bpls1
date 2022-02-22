@@ -1,5 +1,6 @@
 package ru.lab.lab1.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
