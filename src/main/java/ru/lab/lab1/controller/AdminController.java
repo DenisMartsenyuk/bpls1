@@ -1,18 +1,15 @@
 package ru.lab.lab1.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
 
     @GetMapping("/movie-info")
-    public ResponseEntity<?> getMovieInfo() {
-
+    public ResponseEntity<?> getMovieInfo(@RequestParam(name = "id") Long id) {
+        System.out.println(id);
         return null;
     }
 
