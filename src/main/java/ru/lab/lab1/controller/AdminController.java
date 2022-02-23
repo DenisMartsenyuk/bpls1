@@ -33,15 +33,15 @@ public class AdminController {
                 .collect(Collectors.toList());
 
         List<HumanRespDTO> directors = movie.getDirectors().stream()
-                .map(x -> HumanRespDTO.builder().name(x.getName()).build())
+                .map(x -> HumanRespDTO.builder().id(x.getId()).name(x.getName()).surname(x.getSurname()).build())
                 .collect(Collectors.toList());
 
         List<HumanRespDTO> writers = movie.getWriters().stream()
-                .map(x -> HumanRespDTO.builder().name(x.getName()).build())
+                .map(x -> HumanRespDTO.builder().id(x.getId()).name(x.getName()).surname(x.getSurname()).build())
                 .collect(Collectors.toList());
 
         List<HumanRespDTO> actors = movie.getActors().stream()
-                .map(x -> HumanRespDTO.builder().name(x.getName()).build())
+                .map(x -> HumanRespDTO.builder().id(x.getId()).name(x.getName()).surname(x.getSurname()).build())
                 .collect(Collectors.toList());
 
 
