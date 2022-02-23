@@ -2,8 +2,11 @@ package ru.lab.lab1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.lab.lab1.dto.SaveCountryReqDTO;
 import ru.lab.lab1.dto.SaveGenreReqDTO;
 import ru.lab.lab1.dto.SaveHumanReqDTO;
+import ru.lab.lab1.dto.SaveMovieReqDTO;
+import ru.lab.lab1.model.Country;
 import ru.lab.lab1.model.Genre;
 import ru.lab.lab1.model.Human;
 import ru.lab.lab1.model.Movie;
@@ -26,12 +29,22 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Movie getMovie(Long id) {
-        return new Movie();
+        return movieRepository.findMovieById(id);
     }
 
     @Override
     public List<Human> getHumans() {
         return humanRepository.findAll();
+    }
+
+    @Override
+    public List<Genre> getGenres() {
+        return genreRepository.findAll();
+    }
+
+    @Override
+    public List<Country> getCountries() {
+        return countryRepository.findAll();
     }
 
     @Override
@@ -47,5 +60,23 @@ public class AdminServiceImpl implements AdminService {
         Genre genre = new Genre();
         genre.setName(saveGenreReqDTO.getName());
         genreRepository.save(genre);
+    }
+
+    @Override
+    public void saveCountry(SaveCountryReqDTO saveCountryReqDTO) {
+        Country country = new Country();
+        country.setName(saveCountryReqDTO.getName());
+        countryRepository.save(country);
+    }
+
+    @Override
+    public void saveMovie(SaveMovieReqDTO saveMovieReqDTO) {
+        Movie movie = new Movie();
+        movie.setId(saveMovieReqDTO.getId());
+        movie.setName(saveMovieReqDTO.getName());
+        movie.setDescription(saveMovieReqDTO.getDescription());
+        movie.setYear(saveMovieReqDTO.getYear());
+        movie.setRuntime(saveMovieReqDTO.getRuntime());
+        movieRepository.save(movie);
     }
 }
