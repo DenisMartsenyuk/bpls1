@@ -4,9 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.lab.lab1.dto.HumanRespDTO;
 import ru.lab.lab1.dto.MessageRespDTO;
 import ru.lab.lab1.dto.SaveGenreReqDTO;
+import ru.lab.lab1.dto.SaveHumanReqDTO;
 import ru.lab.lab1.service.AdminService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -21,10 +26,12 @@ public class AdminController {
         return null;
     }
 
-    @GetMapping("/human")
+    @GetMapping("/humans")
     public ResponseEntity<?> getHumans() {
-
-        return null;
+        List<HumanRespDTO> humanRespDTOList = adminService.getHumans().stream()
+                .map(x -> HumanRespDTO.builder().id(x.getId()).name(x.getName()).surname(x.getSurname()).build())
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(humanRespDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/genres")
@@ -34,10 +41,12 @@ public class AdminController {
     }
 
     @PostMapping("/save-human")
-    public ResponseEntity<?> saveHuman() {
-        return null;
+    public ResponseEntity<?> saveHuman(@RequestBody SaveHumanReqDTO saveHumanReqDTO) {
+        adminService.saveHuman(saveHumanReqDTO);
+        return new ResponseEntity<>(MessageRespDTO.builder().message("Актер сохранен").build(), HttpStatus.OK);
     }
 
+    //todo скорее всего не надо, тк это можно делать при сохранении фильма
     @PostMapping("/save-genre")
     public ResponseEntity<?> saveGenre(@RequestBody SaveGenreReqDTO saveGenreReqDTO) {
         adminService.saveGenre(saveGenreReqDTO);
