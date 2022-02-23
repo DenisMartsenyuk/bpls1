@@ -17,6 +17,7 @@ import ru.lab.lab1.repository.MovieRepository;
 import ru.lab.lab1.service.AdminService;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +78,11 @@ public class AdminServiceImpl implements AdminService {
         movie.setDescription(saveMovieReqDTO.getDescription());
         movie.setYear(saveMovieReqDTO.getYear());
         movie.setRuntime(saveMovieReqDTO.getRuntime());
+        movie.setGenres(genreRepository.findGenresByNameIn(saveMovieReqDTO.getGenres()));
+        movie.setCountries(countryRepository.findCountriesByNameIn(saveMovieReqDTO.getCountries()));
+        movie.setDirectors(humanRepository.findHumanByIdIn(saveMovieReqDTO.getDirectors()));
+        movie.setWriters(humanRepository.findHumanByIdIn(saveMovieReqDTO.getWriters()));
+        movie.setActors(humanRepository.findHumanByIdIn(saveMovieReqDTO.getActors()));
         movieRepository.save(movie);
     }
 }

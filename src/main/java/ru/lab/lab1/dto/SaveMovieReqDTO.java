@@ -2,7 +2,7 @@ package ru.lab.lab1.dto;
 
 import lombok.Data;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class SaveMovieReqDTO {
@@ -11,9 +11,9 @@ public class SaveMovieReqDTO {
     private String description;
     private Integer year;
     private Integer runtime;
-    private Set<String> genres;
-    private Set<String> countries;
-    private Set<Integer> directors;
-    private Set<Integer> writers;
-    private Set<Integer> actors;
+    private List<String> genres;
+    private List<String> countries;
+    private List<Long> directors;
+    private List<Long> writers;
+    private List<Long> actors;
 }
