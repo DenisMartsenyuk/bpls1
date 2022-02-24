@@ -6,6 +6,7 @@ import ru.lab.lab1.dto.SaveCountryReqDTO;
 import ru.lab.lab1.dto.SaveGenreReqDTO;
 import ru.lab.lab1.dto.SaveHumanReqDTO;
 import ru.lab.lab1.dto.SaveMovieReqDTO;
+import ru.lab.lab1.exception.DatabaseException;
 import ru.lab.lab1.model.Country;
 import ru.lab.lab1.model.Genre;
 import ru.lab.lab1.model.Human;
@@ -29,7 +30,11 @@ public class AdminServiceImpl implements AdminService {
     private final MovieRepository movieRepository;
 
     @Override
-    public Movie getMovie(Long id) {
+    public Movie getMovie(Long id) throws DatabaseException {
+        Movie movie = movieRepository.findMovieById(id);
+        if (movie == null) {
+            throw new DatabaseException("Фильм не найден");
+        }
         return movieRepository.findMovieById(id);
     }
 
@@ -71,18 +76,39 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void saveMovie(SaveMovieReqDTO saveMovieReqDTO) {
+    public void saveMovie(SaveMovieReqDTO saveMovieReqDTO) throws DatabaseException {
+        Set<Genre> genres = genreRepository.findGenresByNameIn(saveMovieReqDTO.getGenres());
+        if (genres.size() != saveMovieReqDTO.getGenres().size()) {
+            throw new DatabaseException("Найдены не все жанры");
+        }
+        Set<Country> countries = countryRepository.findCountriesByNameIn(saveMovieReqDTO.getCountries());
+        if (countries.size() != saveMovieReqDTO.getCountries().size()) {
+            throw new DatabaseException("Найдены не все страны");
+        }
+        Set<Human> directors = humanRepository.findHumanByIdIn(saveMovieReqDTO.getDirectors());
+        if (directors.size() != saveMovieReqDTO.getDirectors().size()) {
+            throw new DatabaseException("Найдены не все режиссеры");
+        }
+        Set<Human> writers = humanRepository.findHumanByIdIn(saveMovieReqDTO.getWriters());
+        if (writers.size() != saveMovieReqDTO.getWriters().size()) {
+            throw new DatabaseException("Найдены не все сценаристы");
+        }
+        Set<Human> actors = humanRepository.findHumanByIdIn(saveMovieReqDTO.getActors());
+        if (actors.size() != saveMovieReqDTO.getActors().size()) {
+            throw new DatabaseException("Найдены не все актеры");
+        }
+
         Movie movie = new Movie();
         movie.setId(saveMovieReqDTO.getId());
         movie.setName(saveMovieReqDTO.getName());
         movie.setDescription(saveMovieReqDTO.getDescription());
         movie.setYear(saveMovieReqDTO.getYear());
         movie.setRuntime(saveMovieReqDTO.getRuntime());
-        movie.setGenres(genreRepository.findGenresByNameIn(saveMovieReqDTO.getGenres()));
-        movie.setCountries(countryRepository.findCountriesByNameIn(saveMovieReqDTO.getCountries()));
-        movie.setDirectors(humanRepository.findHumanByIdIn(saveMovieReqDTO.getDirectors()));
-        movie.setWriters(humanRepository.findHumanByIdIn(saveMovieReqDTO.getWriters()));
-        movie.setActors(humanRepository.findHumanByIdIn(saveMovieReqDTO.getActors()));
+        movie.setGenres(genres);
+        movie.setCountries(countries);
+        movie.setDirectors(directors);
+        movie.setWriters(writers);
+        movie.setActors(actors);
         movieRepository.save(movie);
     }
 }
