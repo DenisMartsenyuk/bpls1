@@ -21,12 +21,12 @@ public class Human {
     private String surname;
 
     @ManyToMany(mappedBy = "directors")
-    List<Movie> moviesDirector;
+    private List<Movie> moviesDirector;
 
     @ManyToMany(mappedBy = "writers")
-    List<Movie> moviesWriter;
+    private List<Movie> moviesWriter;
 
     @ManyToMany(mappedBy = "actors")
-    List<Movie> moviesActor;
+    private List<Movie> moviesActor;
 
 }

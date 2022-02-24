@@ -98,7 +98,7 @@ public class AdminController {
     @PostMapping("/save-country")
     public ResponseEntity<?> saveCountry(@RequestBody SaveCountryReqDTO saveCountryReqDTO) {
         adminService.saveCountry(saveCountryReqDTO);
-        return new ResponseEntity<>(MessageRespDTO.builder().message("Страна сохранена"), HttpStatus.OK);
+        return new ResponseEntity<>(MessageRespDTO.builder().message("Страна сохранена").build(), HttpStatus.OK);
     }
 
     @PostMapping("/save-movie")

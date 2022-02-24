@@ -11,8 +11,8 @@ import java.util.List;
 public class Country {
     @Id
     @Column(name = "name")
-    String name;
+    private String name;
 
     @ManyToMany(mappedBy = "countries")
-    List<Movie> movies;
+    private List<Movie> movies;
 }
