@@ -32,7 +32,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Movie getMovie(Long id) throws DatabaseException {
-        return Optional.ofNullable(movieRepository.findMovieById(id)).orElseThrow(() -> new DatabaseException("Фильм не найден"));
+        return movieRepository.findMovieById(id).orElseThrow(() -> new DatabaseException("Фильм не найден"));
     }
 
     @Override
