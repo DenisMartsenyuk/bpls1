@@ -18,6 +18,7 @@ import ru.lab.lab1.repository.MovieRepository;
 import ru.lab.lab1.service.AdminService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -31,11 +32,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Movie getMovie(Long id) throws DatabaseException {
-        Movie movie = movieRepository.findMovieById(id);
-        if (movie == null) {
-            throw new DatabaseException("Фильм не найден");
-        }
-        return movieRepository.findMovieById(id);
+        return Optional.ofNullable(movieRepository.findMovieById(id)).orElseThrow(() -> new DatabaseException("Фильм не найден"));
     }
 
     @Override
