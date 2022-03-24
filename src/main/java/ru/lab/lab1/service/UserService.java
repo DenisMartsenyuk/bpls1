@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface UserService {
     Movie getMovie(Long id) throws DatabaseException;
+    List<Movie> getMovies();
     List<Human> getHumans();
     List<Genre> getGenres();
     List<Country> getCountries();

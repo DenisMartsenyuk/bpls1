@@ -13,6 +13,7 @@ public class MovieRespDTO {
     private String description;
     private Integer year;
     private Integer runtime;
+    private Double averageRating;
     private List<GenreRespDTO> genres;
     private List<CountryRespDTO> countries;
     private List<HumanRespDTO> directors;

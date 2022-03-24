@@ -2,6 +2,9 @@ package ru.lab.lab1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import ru.lab.lab1.dto.RateMovieReqDTO;
 import ru.lab.lab1.exception.DatabaseException;
 import ru.lab.lab1.model.*;
@@ -9,7 +12,6 @@ import ru.lab.lab1.repository.*;
 import ru.lab.lab1.service.UserService;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -20,10 +22,16 @@ public class UserServiceImpl implements UserService {
     private final MovieRepository movieRepository;
     private final IMDBUserRepository userRepository;
     private final RatingRepository ratingRepository;
+    private final TransactionTemplate transactionTemplate;
 
     @Override
     public Movie getMovie(Long id) throws DatabaseException {
         return movieRepository.findMovieById(id).orElseThrow(() -> new DatabaseException("Фильм не найден"));
+    }
+
+    @Override
+    public List<Movie> getMovies() {
+        return movieRepository.findAll();
     }
 
     @Override
@@ -45,13 +53,24 @@ public class UserServiceImpl implements UserService {
     public void rateMovie(RateMovieReqDTO rateMovieReqDTO) throws DatabaseException {
         Movie movie = movieRepository.findMovieById(rateMovieReqDTO.getMovieId()).orElseThrow(() -> new DatabaseException("Фильм не найден"));
         IMDBUser user = userRepository.findIMDBUserByLogin(rateMovieReqDTO.getLogin()).orElseThrow(() -> new DatabaseException("Пользователь IMDb не найден"));
-        setRating(movie, user, rateMovieReqDTO.getValue());
-        updateAverageRatingMovie(movie);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    setRating(movie, user, rateMovieReqDTO.getValue());
+                    updateAverageRatingMovie(movie);
+                } catch (Exception e) {
+                    status.setRollbackOnly();
+                }
+            }
+        });
     }
 
     private void setRating(Movie movie, IMDBUser user, Double value) {
         Rating rating = ratingRepository.findRatingByMovieAndUser(movie, user).orElseGet(Rating::new);
         rating.setValue(value);
+        rating.setMovie(movie);
+        rating.setUser(user);
         ratingRepository.save(rating);
     }
 

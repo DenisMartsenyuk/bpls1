@@ -22,6 +22,18 @@ public class UserController {
     @GetMapping("/movie")
     public ResponseEntity<?> getMovieInfo(@RequestParam(name = "id") Long id) throws DatabaseException {
         Movie movie = userService.getMovie(id);
+        return new ResponseEntity<>(getMovieRespDTO(movie), HttpStatus.OK);
+    }
+
+    @GetMapping("/movies")
+    public ResponseEntity<?> getMovies() {
+        List<MovieRespDTO> movieRespDTOList = userService.getMovies().stream()
+                .map(this::getMovieRespDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(movieRespDTOList, HttpStatus.OK);
+    }
+
+    private MovieRespDTO getMovieRespDTO(Movie movie) {
         List<GenreRespDTO> genres =  movie.getGenres().stream()
                 .map(x -> GenreRespDTO.builder().name(x.getName()).build())
                 .collect(Collectors.toList());
@@ -43,20 +55,19 @@ public class UserController {
                 .collect(Collectors.toList());
 
 
-        MovieRespDTO movieRespDTO = MovieRespDTO.builder()
+        return MovieRespDTO.builder()
                 .id(movie.getId())
                 .name(movie.getName())
                 .description(movie.getDescription())
                 .year(movie.getYear())
                 .runtime(movie.getRuntime())
+                .averageRating(movie.getAverageRating())
                 .genres(genres)
                 .countries(countries)
                 .directors(directors)
                 .writers(writers)
                 .actors(actors)
                 .build();
-
-        return new ResponseEntity<>(movieRespDTO, HttpStatus.OK);
     }
 
     @GetMapping("/humans")
@@ -68,7 +79,7 @@ public class UserController {
     }
 
     @GetMapping("/genres")
-    public ResponseEntity<?> getGeneres() {
+    public ResponseEntity<?> getGenres() {
         List<GenreRespDTO> genreRespDTOList = userService.getGenres().stream()
                 .map(x -> GenreRespDTO.builder().name(x.getName()).build())
                 .collect(Collectors.toList());
