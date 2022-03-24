@@ -17,8 +17,6 @@ import ru.lab.lab1.repository.HumanRepository;
 import ru.lab.lab1.repository.MovieRepository;
 import ru.lab.lab1.service.AdminService;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -29,26 +27,6 @@ public class AdminServiceImpl implements AdminService {
     private final GenreRepository genreRepository;
     private final HumanRepository humanRepository;
     private final MovieRepository movieRepository;
-
-    @Override
-    public Movie getMovie(Long id) throws DatabaseException {
-        return movieRepository.findMovieById(id).orElseThrow(() -> new DatabaseException("Фильм не найден"));
-    }
-
-    @Override
-    public List<Human> getHumans() {
-        return humanRepository.findAll();
-    }
-
-    @Override
-    public List<Genre> getGenres() {
-        return genreRepository.findAll();
-    }
-
-    @Override
-    public List<Country> getCountries() {
-        return countryRepository.findAll();
-    }
 
     @Override
     public void saveHuman(SaveHumanReqDTO saveHumanReqDTO) {
