@@ -52,23 +52,4 @@ public class DefaultAdvice {
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e) {
         return new ResponseEntity<>(MessageRespDTO.builder().message(e.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
-
-    //если подпись не совпадает с вычисленной, то SignatureException
-    //если подпись некорректная (не парсится) то MalformedJwtException
-    //если подпись истекла по времени,  то ExpiredJwtException //todo почему то не ловит
-
-    @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<?> handleSignatureException(SignatureException e) {
-        return new ResponseEntity<>(MessageRespDTO.builder().message(e.getMessage()).build(), HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<?> handleMalformedJwtException(MalformedJwtException e) {
-        return new ResponseEntity<>(MessageRespDTO.builder().message(e.getMessage()).build(), HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException e) {
-        return new ResponseEntity<>(MessageRespDTO.builder().message(e.getMessage()).build(), HttpStatus.UNAUTHORIZED);
-    }
 }

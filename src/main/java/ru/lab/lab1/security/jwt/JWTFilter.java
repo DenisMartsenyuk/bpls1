@@ -1,6 +1,7 @@
 package ru.lab.lab1.security.jwt;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -31,7 +32,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
-            login = jwtProvider.extractLogin(token);
+            try {
+                login = jwtProvider.extractLogin(token);
+            } catch (Exception ignored) { }
+            //todo с этими ошибками что-то порешать
         }
 
 

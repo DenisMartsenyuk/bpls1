@@ -1,6 +1,10 @@
 package ru.lab.lab1.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -23,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final IMDBUserRepository userRepository;
     private final RatingRepository ratingRepository;
     private final TransactionTemplate transactionTemplate;
+//    private final AuthenticationManager authenticationManager;
 
     @Override
     public Movie getMovie(Long id) throws DatabaseException {
@@ -51,8 +56,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void rateMovie(RateMovieReqDTO rateMovieReqDTO) throws DatabaseException {
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         Movie movie = movieRepository.findMovieById(rateMovieReqDTO.getMovieId()).orElseThrow(() -> new DatabaseException("Фильм не найден"));
-        IMDBUser user = userRepository.findIMDBUserByLogin(rateMovieReqDTO.getLogin()).orElseThrow(() -> new DatabaseException("Пользователь IMDb не найден"));
+        IMDBUser user = userRepository.findIMDBUserByLogin(login).orElseThrow(() -> new DatabaseException("Пользователь IMDb не найден"));
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
