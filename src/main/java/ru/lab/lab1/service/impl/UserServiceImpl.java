@@ -2,18 +2,14 @@ package ru.lab.lab1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.lab.lab1.dto.RateMovieReqDTO;
 import ru.lab.lab1.exception.DatabaseException;
-import ru.lab.lab1.model.Country;
-import ru.lab.lab1.model.Genre;
-import ru.lab.lab1.model.Human;
-import ru.lab.lab1.model.Movie;
-import ru.lab.lab1.repository.CountryRepository;
-import ru.lab.lab1.repository.GenreRepository;
-import ru.lab.lab1.repository.HumanRepository;
-import ru.lab.lab1.repository.MovieRepository;
+import ru.lab.lab1.model.*;
+import ru.lab.lab1.repository.*;
 import ru.lab.lab1.service.UserService;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +18,8 @@ public class UserServiceImpl implements UserService {
     private final GenreRepository genreRepository;
     private final HumanRepository humanRepository;
     private final MovieRepository movieRepository;
+    private final IMDBUserRepository userRepository;
+    private final RatingRepository ratingRepository;
 
     @Override
     public Movie getMovie(Long id) throws DatabaseException {
@@ -41,6 +39,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Country> getCountries() {
         return countryRepository.findAll();
+    }
+
+    @Override
+    public void rateMovie(RateMovieReqDTO rateMovieReqDTO) throws DatabaseException {
+        Movie movie = movieRepository.findMovieById(rateMovieReqDTO.getMovieId()).orElseThrow(() -> new DatabaseException("Фильм не найден"));
+        IMDBUser user = userRepository.findIMDBUserByLogin(rateMovieReqDTO.getLogin()).orElseThrow(() -> new DatabaseException("Пользователь IMDb не найден"));
+        setRating(movie, user, rateMovieReqDTO.getValue());
+        updateAverageRatingMovie(movie);
+    }
+
+    private void setRating(Movie movie, IMDBUser user, Double value) {
+        Rating rating = ratingRepository.findRatingByMovieAndUser(movie, user).orElseGet(Rating::new);
+        rating.setValue(value);
+        ratingRepository.save(rating);
+    }
+
+    private void updateAverageRatingMovie(Movie movie) {
+        double averageRating = movie.getRatings().stream().mapToDouble(Rating::getValue).average().orElse(Double.NaN);
+        movie.setAverageRating(Double.isNaN(averageRating) ? null : averageRating);
+        movieRepository.save(movie);
     }
 
 }

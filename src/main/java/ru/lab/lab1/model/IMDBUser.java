@@ -3,6 +3,7 @@ package ru.lab.lab1.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "bpls_imdb_user")
@@ -18,4 +19,7 @@ public class IMDBUser {
     @ManyToOne
     @JoinColumn(name = "role_name", nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Rating> ratings;
 }

@@ -3,6 +3,7 @@ package ru.lab.lab1.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,6 +26,9 @@ public class Movie {
 
     @Column(name = "runtime")
     private Integer runtime;
+
+    @Column(name = "average_rating")
+    private Double averageRating;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "bpls_movie_genre",
@@ -55,4 +59,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Human> actors;
+
+    @OneToMany(mappedBy = "movie")
+    private List<Rating> ratings;
 }

@@ -1,5 +1,6 @@
 package ru.lab.lab1.service;
 
+import ru.lab.lab1.dto.RateMovieReqDTO;
 import ru.lab.lab1.exception.DatabaseException;
 import ru.lab.lab1.model.Country;
 import ru.lab.lab1.model.Genre;
@@ -13,4 +14,5 @@ public interface UserService {
     List<Human> getHumans();
     List<Genre> getGenres();
     List<Country> getCountries();
+    void rateMovie(RateMovieReqDTO rateMovieReqDTO) throws DatabaseException;
 }
