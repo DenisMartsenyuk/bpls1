@@ -1,10 +1,7 @@
 package ru.lab.lab1.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -27,7 +24,6 @@ public class UserServiceImpl implements UserService {
     private final IMDBUserRepository userRepository;
     private final RatingRepository ratingRepository;
     private final TransactionTemplate transactionTemplate;
-//    private final AuthenticationManager authenticationManager;
 
     @Override
     public Movie getMovie(Long id) throws DatabaseException {

@@ -35,7 +35,6 @@ public class JWTFilter extends OncePerRequestFilter {
             try {
                 login = jwtProvider.extractLogin(token);
             } catch (Exception ignored) { }
-            //todo с этими ошибками что-то порешать
         }
 
 
