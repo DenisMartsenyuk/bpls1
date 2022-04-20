@@ -16,6 +16,9 @@ public class IMDBUser {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email")
+    private String email;
+
     @ManyToOne
     @JoinColumn(name = "role_name", nullable = false)
     private Role role;

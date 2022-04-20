@@ -12,6 +12,7 @@ import ru.lab.lab1.model.*;
 import ru.lab.lab1.repository.*;
 import ru.lab.lab1.service.UserService;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -73,6 +74,7 @@ public class UserServiceImpl implements UserService {
         rating.setValue(value);
         rating.setMovie(movie);
         rating.setUser(user);
+        rating.setDate(new Date(new java.util.Date().getTime()));
         ratingRepository.save(rating);
     }
 
