@@ -1,27 +1,23 @@
 package ru.lab.lab1.quartz;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
-import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.*;
 
-import javax.sql.DataSource;
 import java.util.Calendar;
 import java.util.Properties;
 
 @Configuration
+@RequiredArgsConstructor
 public class QuartzConfig {
 
-    private ApplicationContext applicationContext;
-
-    public QuartzConfig(ApplicationContext applicationContext, DataSource dataSource) {
-        this.applicationContext = applicationContext;
-    }
+    private final ApplicationContext applicationContext;
 
     @Bean
     public SpringBeanJobFactory springBeanJobFactory() {
@@ -35,8 +31,8 @@ public class QuartzConfig {
         SchedulerFactoryBean schedulerFactory = new SchedulerFactoryBean();
 
         Properties properties = new Properties();
-        properties.setProperty("org.quartz.scheduler.instanceName", "MyInstanceName");
-        properties.setProperty("org.quartz.scheduler.instanceId", "Instance1");
+        properties.setProperty("org.quartz.scheduler.instanceName", "instName");
+        properties.setProperty("org.quartz.scheduler.instanceId", "instId");
         schedulerFactory.setQuartzProperties(properties);
         schedulerFactory.setOverwriteExistingJobs(true);
         schedulerFactory.setAutoStartup(true);

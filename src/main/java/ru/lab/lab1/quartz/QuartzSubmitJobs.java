@@ -7,19 +7,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 
-import java.text.ParseException;
-
 @Configuration
 public class QuartzSubmitJobs {
     private static final String CRON = "0/30 * * * * ?";//"0/30 * * * * ?"; //0 0 0 1 * ?
 
-    @Bean(name = "job1")
+    @Bean(name = "top_movies_notification")
     public JobDetailFactoryBean jobMemberClassStats() {
-        return QuartzConfig.createJobDetail(TopMoviesNotifications.class, "statJob");
+        return QuartzConfig.createJobDetail(TopMoviesNotifications.class, "notification_job");
     }
 
     @Bean
-    public CronTriggerFactoryBean triggerMemberClassStats(@Qualifier("job1") JobDetail jobDetail) throws ParseException {
-        return QuartzConfig.createCronTrigger(jobDetail, CRON, "statTrigger");
+    public CronTriggerFactoryBean triggerMemberClassStats(@Qualifier("top_movies_notification") JobDetail jobDetail) {
+        return QuartzConfig.createCronTrigger(jobDetail, CRON, "notification_trigger");
     }
 }

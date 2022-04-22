@@ -1,8 +1,5 @@
 spring:
   activemq:
-    broker-url: tcp://localhost:8161
+    broker-url: mqtt://localhost:1883
     user: admin
     password: admin
-
-  jms:
-    pub-sub-domain: true

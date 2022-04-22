@@ -6,11 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.lab.lab1.dto.*;
 import ru.lab.lab1.exception.DatabaseException;
-import ru.lab.lab1.model.Movie;
 import ru.lab.lab1.service.AdminService;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin")
